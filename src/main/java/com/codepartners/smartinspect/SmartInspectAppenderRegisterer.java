@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 @AutoConfiguration
 @ConditionalOnProperty(prefix = "smartinspect", name = "enabled", havingValue = "true")
 public class SmartInspectAppenderRegisterer {
-    private Session session;
+    private final Session session;
 
     public SmartInspectAppenderRegisterer(Session session) {
         this.session = session;
