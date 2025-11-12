@@ -19,26 +19,33 @@ public class SmartInspectAppender extends AppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent eventObject) {
         Level level = eventObject.getLevel();
-        com.gurock.smartinspect.Level siLevel;
-
         String text = eventObject.getFormattedMessage();
+
+        com.gurock.smartinspect.Level siLevel;
+        LogEntryType logEntryType;
 
         if (level.equals(ERROR)) {
             siLevel = com.gurock.smartinspect.Level.Error;
+            logEntryType = LogEntryType.Error;
         } else if (level.equals(WARN)) {
             siLevel = com.gurock.smartinspect.Level.Warning;
+            logEntryType = LogEntryType.Warning;
         } else if (level.equals(INFO)) {
             siLevel = com.gurock.smartinspect.Level.Message;
+            logEntryType = LogEntryType.Message;
         } else if (level.equals(DEBUG)) {
             siLevel = com.gurock.smartinspect.Level.Debug;
+            logEntryType = LogEntryType.Debug;
         } else if (level.equals(TRACE)) {
             siLevel = com.gurock.smartinspect.Level.Verbose;
+            logEntryType = LogEntryType.Verbose;
         } else {
             siLevel = com.gurock.smartinspect.Level.Message;
+            logEntryType = LogEntryType.Verbose;
         }
 
         session.sendCustomLogEntry(
-                siLevel, text, LogEntryType.Message, ViewerId.Title, null
+                siLevel, text, logEntryType, ViewerId.Title, null
         );
     }
 }
