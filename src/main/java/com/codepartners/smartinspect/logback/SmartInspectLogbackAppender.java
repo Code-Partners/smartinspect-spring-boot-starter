@@ -1,4 +1,4 @@
-package com.codepartners.smartinspect;
+package com.codepartners.smartinspect.logback;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -9,10 +9,10 @@ import com.gurock.smartinspect.session.Session;
 
 import static ch.qos.logback.classic.Level.*;
 
-public class SmartInspectAppender extends AppenderBase<ILoggingEvent> {
+public class SmartInspectLogbackAppender extends AppenderBase<ILoggingEvent> {
     private final Session session;
 
-    public SmartInspectAppender(Session session) {
+    public SmartInspectLogbackAppender(Session session) {
         this.session = session;
     }
 
