@@ -2,3 +2,4 @@ com.codepartners.smartinspect.SmartInspectAutoConfiguration
 com.codepartners.smartinspect.logback.SmartInspectLogbackAppenderRegisterer
 com.codepartners.smartinspect.log4j.SmartInspectLog4jAppenderRegisterer
 com.codepartners.smartinspect.jul.SmartInspectJulHandlerRegisterer
+com.codepartners.smartinspect.LogExecutionFlowAspectRegisterer
