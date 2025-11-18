@@ -97,17 +97,6 @@
     </distributionManagement>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${project.basedir}</directory>
-                <includes>
-                    <include>README*</include>
-                    <include>NOTICE*</include>
-                    <include>LICENSE*</include>
-                </includes>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
