@@ -31,9 +31,6 @@ pipeline {
 
           # staging release
           ./mvnw -s ${MAVEN_SETTINGS_XML} clean deploy
-          
-          # propagate staging release to Maven Central
-          ./mvnw -s ${MAVEN_SETTINGS_XML} nexus-staging:release
         '''
       }
     }
