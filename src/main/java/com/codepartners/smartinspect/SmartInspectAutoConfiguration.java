@@ -1,12 +1,14 @@
 package com.codepartners.smartinspect;
 
 import com.gurock.smartinspect.*;
+import com.gurock.smartinspect.connections.builder.CloudProtocolConnectionStringBuilder;
 import com.gurock.smartinspect.connections.builder.cloud.CloudConnectionStringBuilder;
 import com.gurock.smartinspect.packets.controlcommand.ControlCommandEvent;
 import com.gurock.smartinspect.packets.logentry.LogEntryEvent;
 import com.gurock.smartinspect.packets.processflow.ProcessFlowEvent;
 import com.gurock.smartinspect.packets.watch.WatchEvent;
 import com.gurock.smartinspect.session.Session;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -19,9 +21,11 @@ public class SmartInspectAutoConfiguration {
     java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SmartInspectAutoConfiguration.class.getName());
 
     private final SmartInspectProperties properties;
+    private final ObjectProvider<SmartInspectCloudProtocolConnectionStringBuilderCustomizer> builderCustomizers;
 
-    public SmartInspectAutoConfiguration(SmartInspectProperties properties) {
+    public SmartInspectAutoConfiguration(SmartInspectProperties properties, ObjectProvider<SmartInspectCloudProtocolConnectionStringBuilderCustomizer> builderCustomizers) {
         this.properties = properties;
+        this.builderCustomizers = builderCustomizers;
     }
 
     @Bean
@@ -61,9 +65,14 @@ public class SmartInspectAutoConfiguration {
                 }
         );
 
-        String connectionString = (new CloudConnectionStringBuilder().addCloudProtocol()
+        CloudProtocolConnectionStringBuilder cloudProtocolConnectionStringBuilder = new CloudConnectionStringBuilder().addCloudProtocol()
                 .setRegion(properties.getRegion())
-                .setWriteKey(properties.getWriteKey())).and().build();
+                .setWriteKey(properties.getWriteKey());
+
+        builderCustomizers.orderedStream()
+                .forEach(customizer -> customizer.customize(cloudProtocolConnectionStringBuilder));
+
+        String connectionString = cloudProtocolConnectionStringBuilder.and().build();
 
         smartInspect.setConnections(connectionString);
 
@@ -73,7 +82,7 @@ public class SmartInspectAutoConfiguration {
     }
 
     @Bean
-    public Session session(SmartInspect smartInspect) throws InvalidConnectionsException {
+    public Session session(SmartInspect smartInspect) {
         return smartInspect.addSession("cloud", true);
     }
 }
